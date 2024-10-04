@@ -2,11 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class FetchAttendance implements ShouldQueue
 {
@@ -30,6 +30,16 @@ class FetchAttendance implements ShouldQueue
             'password' => $this->user['password'],
         ]);
 
-        Log::info($response->json());
+        $json = $response->json();
+
+        $subjects = array_map(function ($subject) {
+            if (isset($subject['percent'])) {
+                unset($subject['percent']);
+            }
+            return $subject;
+        }, $json['subjects']);
+
+        Subject::upsert($subjects, uniqueBy: ['subject_code'], update: ['subject_code', 'name']);
+//        $this->user->update([]);
     }
 }
