@@ -3,13 +3,14 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import {Head, Link, useForm} from '@inertiajs/react';
+import {FormEventHandler} from 'react';
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const {data, setData, post, processing, errors, reset} = useForm({
         name: '',
         email: '',
+        rollno: '',
         password: '',
         password_confirmation: '',
     });
@@ -24,11 +25,11 @@ export default function Register() {
 
     return (
         <GuestLayout>
-            <Head title="Register" />
+            <Head title="Register"/>
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="name" value="Name"/>
 
                     <TextInput
                         id="name"
@@ -41,11 +42,28 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.name} className="mt-2" />
+                    <InputError message={errors.name} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="rollno" value="Roll No"/>
+
+                    <TextInput
+                        id="rollno"
+                        type="text"
+                        name="rollno"
+                        value={data.rollno}
+                        className="mt-1 block w-full"
+                        autoComplete="username"
+                        onChange={(e) => setData('rollno', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.rollno} className="mt-2"/>
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="email" value="Email"/>
 
                     <TextInput
                         id="email"
@@ -58,11 +76,11 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError message={errors.email} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Password"/>
 
                     <TextInput
                         id="password"
@@ -75,7 +93,7 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    <InputError message={errors.password} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
