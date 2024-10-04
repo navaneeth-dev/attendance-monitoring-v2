@@ -1,26 +1,99 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import {Area, AreaChart, CartesianGrid, XAxis} from "recharts"
 
-export default function Dashboard() {
+import {TrendingUp} from "lucide-react"
+
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/Components/UI/Card"
+import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent,} from "@/Components/UI/Chart"
+import Authenticated from "@/Layouts/AuthenticatedLayout";
+
+"use client"
+
+export const description = "A stacked area chart"
+
+const chartData = [
+    {month: "January", desktop: 186, mobile: 80},
+    {month: "February", desktop: 305, mobile: 200},
+    {month: "March", desktop: 237, mobile: 120},
+    {month: "April", desktop: 73, mobile: 190},
+    {month: "May", desktop: 209, mobile: 130},
+    {month: "June", desktop: 214, mobile: 140},
+]
+
+const chartConfig = {
+    desktop: {
+        label: "Desktop",
+        color: "hsl(var(--chart-1))",
+    },
+    mobile: {
+        label: "Mobile",
+        color: "hsl(var(--chart-2))",
+    },
+} satisfies ChartConfig
+
+export default function Component() {
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
-                </h2>
-            }
-        >
-            <Head title="Dashboard" />
-
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            You're logged in!
+        <Authenticated>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Area Chart - Stacked</CardTitle>
+                    <CardDescription>
+                        Showing total visitors for the last 6 months
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ChartContainer config={chartConfig} className="max-h-52">
+                        <AreaChart
+                            accessibilityLayer
+                            data={chartData}
+                            margin={{
+                                left: 12,
+                                right: 12,
+                            }}
+                        >
+                            <CartesianGrid vertical={false}/>
+                            <XAxis
+                                dataKey="month"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                                tickFormatter={(value) => value.slice(0, 3)}
+                            />
+                            <ChartTooltip
+                                cursor={false}
+                                content={<ChartTooltipContent indicator="dot"/>}
+                            />
+                            <Area
+                                dataKey="mobile"
+                                type="natural"
+                                fill="var(--color-mobile)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-mobile)"
+                                stackId="a"
+                            />
+                            <Area
+                                dataKey="desktop"
+                                type="natural"
+                                fill="var(--color-desktop)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-desktop)"
+                                stackId="a"
+                            />
+                        </AreaChart>
+                    </ChartContainer>
+                </CardContent>
+                <CardFooter>
+                    <div className="flex w-full items-start gap-2 text-sm">
+                        <div className="grid gap-2">
+                            <div className="flex items-center gap-2 font-medium leading-none">
+                                Trending up by 5.2% this month <TrendingUp className="h-4 w-4"/>
+                            </div>
+                            <div className="flex items-center gap-2 leading-none text-muted-foreground">
+                                January - June 2024
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </AuthenticatedLayout>
-    );
+                </CardFooter>
+            </Card>
+        </Authenticated>
+    )
 }
