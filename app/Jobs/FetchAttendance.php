@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Subject;
+use App\Models\SubjectAttendance;
+use App\Models\SubjectFilter;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -40,6 +42,25 @@ class FetchAttendance implements ShouldQueue
         }, $json['subjects']);
 
         Subject::upsert($subjects, uniqueBy: ['subject_code'], update: ['subject_code', 'name']);
+
+        // Delete old SubjectFilter if new sem
+        SubjectFilter::where('user_id', '=', $this->user->id)->delete();
+
+        foreach ($json['subjects'] as $subject) {
+            $subModel = Subject::where('subject_code', $subject['subject_code'])->first();
+            SubjectAttendance::create([
+                'percent' => $subject['percent'],
+                'user_id' => $this->user->id,
+                'subject_id' => $subModel->id,
+            ]);
+
+            // Create the subject filter for the User
+            SubjectFilter::create([
+                'subject_id' => $subModel->id,
+                'user_id' => $this->user->id,
+            ]);
+        }
+
 //        $this->user->update([]);
     }
 }

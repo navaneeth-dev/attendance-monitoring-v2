@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class SubjectFilter extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['user_id', 'subject_id'];
 }

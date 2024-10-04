@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class SubjectAttendance extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['percent', 'subject_id', 'user_id'];
 }
