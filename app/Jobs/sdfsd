@@ -1,6 +1,0 @@
-SubjectAttendance::create([
-                'percent' => 11.0,
-                'user_id' => 1,
-                'subject_id' => 1,
-                'date' => today(),
-            ]);
