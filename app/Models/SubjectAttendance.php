@@ -11,10 +11,15 @@ class SubjectAttendance extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['percent', 'subject_id', 'user_id', 'date'];
+    protected $fillable = ['percent', 'subject_id', 'user_id', 'scrape_id'];
 
     public function subject()
     {
         return $this->belongsTo(Subject::class);
+    }
+
+    public function scrape()
+    {
+        return $this->belongsTo(Scrape::class);
     }
 }

@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Scrape;
+use App\Models\SubjectFilter;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,13 +18,22 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    // Filter -> Get Subject -> SubjectAttendances
-//    $subjects = SubjectFilter::with('subject.subject_attendances')->get();
-    $subjects = DB::table("subject_attendances")->select('*')->groupBy('subject_id')->get();
+    $user_id = auth()->user()->id;
+    $subject_filters = SubjectFilter::where('user_id', $user_id)->with('subject')->get();
+
+    $subject_attendances = Scrape::where('user_id', $user_id)
+        ->with(['subject_attendances' => function (Builder $query) use ($subject_filters) {
+            $query->whereIn('subject_id', $subject_filters->pluck('subject_id'));
+        }])->get();
+
+//    $subject_attendances = Scrape::where('user_id', $user_id)
+//        ->with(['subject_attendances' => function (Builder $query) use ($subject_filters) {
+//            $query->whereIn('subject_attendances.subject_id', $subject_filters->pluck('id'));
+//        }])->get();
 
     return Inertia::render('Dashboard', [
-        'subject_filters' => $subjects,
-        'subject_attendances' => $subjects,
+        'subject_filters' => $subject_filters,
+        'subject_attendances' => $subject_attendances,
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

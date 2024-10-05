@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Scrape;
 use App\Models\Subject;
 use App\Models\SubjectAttendance;
 use App\Models\SubjectFilter;
@@ -46,13 +47,19 @@ class FetchAttendance implements ShouldQueue
         // Delete old SubjectFilter if new sem
         SubjectFilter::where('user_id', '=', $this->user->id)->delete();
 
+        $scrape = Scrape::create([
+            'user_id' => $this->user->id,
+            'date' => today(),
+        ]);
+
         foreach ($json['subjects'] as $subject) {
             $subModel = Subject::where('subject_code', $subject['subject_code'])->first();
+
             SubjectAttendance::create([
                 'percent' => $subject['percent'],
                 'user_id' => $this->user->id,
                 'subject_id' => $subModel->id,
-                'date' => today(),
+                'scrape_id' => $scrape->id,
             ]);
 
             // Create the subject filter for the User
