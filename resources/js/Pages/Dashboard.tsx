@@ -20,9 +20,9 @@ export default function Dashboard({subject_filters, subject_attendances}) {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px] font-medium">Date</TableHead>
+                                <TableHead className="w-[100px] text-center py-2">Date</TableHead>
                                 {subject_filters.map(subject => (
-                                    <TableHead className="w-[100px] text-xs"
+                                    <TableHead className="w-[100px] text-sm text-center py-2"
                                                key={subject.subject.id}>{subject.subject.name}</TableHead>
                                 ))}
                             </TableRow>
@@ -30,10 +30,10 @@ export default function Dashboard({subject_filters, subject_attendances}) {
                         <TableBody>
                             {subject_attendances.map(sub_attendance => (
                                 <TableRow key={sub_attendance.id}>
-                                    <TableCell className="font-medium">{sub_attendance.date}</TableCell>
+                                    <TableCell className="text-center">{sub_attendance.date}</TableCell>
                                     {sub_attendance.subject_attendances.map(attendance => (
-                                        <TableCell className="font-medium"
-                                                   key={attendance.id}>{attendance.percent}</TableCell>
+                                        <TableCell
+                                            key={attendance.id} className="text-center">{attendance.percent}</TableCell>
                                     ))}
                                 </TableRow>
                             ))}
