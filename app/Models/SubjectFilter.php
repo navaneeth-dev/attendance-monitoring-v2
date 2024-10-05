@@ -10,4 +10,9 @@ class SubjectFilter extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'subject_id'];
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
 }

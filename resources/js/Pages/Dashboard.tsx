@@ -1,99 +1,44 @@
-import {Area, AreaChart, CartesianGrid, XAxis} from "recharts"
-
-import {TrendingUp} from "lucide-react"
-
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/Components/UI/Card"
-import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent,} from "@/Components/UI/Chart"
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/Components/UI/Table";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
+import {Head} from '@inertiajs/react';
 
-"use client"
-
-export const description = "A stacked area chart"
-
-const chartData = [
-    {month: "January", desktop: 186, mobile: 80},
-    {month: "February", desktop: 305, mobile: 200},
-    {month: "March", desktop: 237, mobile: 120},
-    {month: "April", desktop: 73, mobile: 190},
-    {month: "May", desktop: 209, mobile: 130},
-    {month: "June", desktop: 214, mobile: 140},
-]
-
-const chartConfig = {
-    desktop: {
-        label: "Desktop",
-        color: "hsl(var(--chart-1))",
-    },
-    mobile: {
-        label: "Mobile",
-        color: "hsl(var(--chart-2))",
-    },
-} satisfies ChartConfig
-
-export default function Component() {
+export default function Dashboard({subject_attendances}) {
     return (
-        <Authenticated>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Area Chart - Stacked</CardTitle>
-                    <CardDescription>
-                        Showing total visitors for the last 6 months
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <ChartContainer config={chartConfig} className="max-h-52">
-                        <AreaChart
-                            accessibilityLayer
-                            data={chartData}
-                            margin={{
-                                left: 12,
-                                right: 12,
-                            }}
-                        >
-                            <CartesianGrid vertical={false}/>
-                            <XAxis
-                                dataKey="month"
-                                tickLine={false}
-                                axisLine={false}
-                                tickMargin={8}
-                                tickFormatter={(value) => value.slice(0, 3)}
-                            />
-                            <ChartTooltip
-                                cursor={false}
-                                content={<ChartTooltipContent indicator="dot"/>}
-                            />
-                            <Area
-                                dataKey="mobile"
-                                type="natural"
-                                fill="var(--color-mobile)"
-                                fillOpacity={0.4}
-                                stroke="var(--color-mobile)"
-                                stackId="a"
-                            />
-                            <Area
-                                dataKey="desktop"
-                                type="natural"
-                                fill="var(--color-desktop)"
-                                fillOpacity={0.4}
-                                stroke="var(--color-desktop)"
-                                stackId="a"
-                            />
-                        </AreaChart>
-                    </ChartContainer>
-                </CardContent>
-                <CardFooter>
-                    <div className="flex w-full items-start gap-2 text-sm">
-                        <div className="grid gap-2">
-                            <div className="flex items-center gap-2 font-medium leading-none">
-                                Trending up by 5.2% this month <TrendingUp className="h-4 w-4"/>
-                            </div>
-                            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                                January - June 2024
-                            </div>
-                        </div>
-                    </div>
-                </CardFooter>
-            </Card>
+        <Authenticated
+            header={
+                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                    Dashboard
+                </h2>
+            }
+        >
+            <Head title="Dashboard"/>
+
+            <div className="py-12">
+                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">Subject</TableHead>
+                                <TableHead>Name</TableHead>
+                                {/*<TableHead>Method</TableHead>*/}
+                                <TableHead className="text-right">Percent</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {subject_attendances.map((sub_attendance) => (
+                                <TableRow key={sub_attendance.id}>
+                                    <TableCell className="font-medium">{sub_attendance.id}</TableCell>
+                                    <TableCell>{sub_attendance.subject.name}</TableCell>
+                                    <TableCell>{sub_attendance.percent}</TableCell>
+                                    {/*<TableCell>{invoice.paymentStatus}</TableCell>*/}
+                                    {/*<TableCell>{invoice.paymentMethod}</TableCell>*/}
+                                    {/*<TableCell className="text-right">{invoice.totalAmount}</TableCell>*/}
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </div>
         </Authenticated>
     )
 }
