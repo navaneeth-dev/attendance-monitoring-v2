@@ -17,4 +17,11 @@ class Scrape extends Model
     {
         return $this->hasMany(SubjectAttendance::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'date' => 'datetime:jS M Y',
+        ];
+    }
 }
