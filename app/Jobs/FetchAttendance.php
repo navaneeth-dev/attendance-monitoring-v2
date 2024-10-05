@@ -52,6 +52,7 @@ class FetchAttendance implements ShouldQueue
                 'percent' => $subject['percent'],
                 'user_id' => $this->user->id,
                 'subject_id' => $subModel->id,
+                'date' => today(),
             ]);
 
             // Create the subject filter for the User

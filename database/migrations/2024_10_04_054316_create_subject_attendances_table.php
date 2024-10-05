@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->float('percent');
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Subject::class)->constrained()->cascadeOnDelete();
-            $table->timestamps();
+            $table->date('date')->default(today());
         });
     }
 

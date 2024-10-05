@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Models\SubjectFilter;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,7 +16,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     // Filter -> Get Subject -> SubjectAttendances
-    $subjects = SubjectFilter::with('subject.subject_attendances')->get();
+//    $subjects = SubjectFilter::with('subject.subject_attendances')->get();
+    $subjects = DB::table("subject_attendances")->select('*')->groupBy('subject_id')->get();
 
     return Inertia::render('Dashboard', [
         'subject_filters' => $subjects,

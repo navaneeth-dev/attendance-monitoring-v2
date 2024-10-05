@@ -9,7 +9,9 @@ class SubjectAttendance extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['percent', 'subject_id', 'user_id'];
+    public $timestamps = false;
+
+    protected $fillable = ['percent', 'subject_id', 'user_id', 'date'];
 
     public function subject()
     {
