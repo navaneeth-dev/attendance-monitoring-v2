@@ -1,10 +1,9 @@
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import {Head} from '@inertiajs/react';
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/Components/UI/Table";
+import SubjectAttendanceChart from "@/Pages/Dashboard/SubjectAttendanceChart";
 
 export default function Dashboard({subject_filters, subject_attendances}) {
-    console.log(subject_attendances);
-
     return (
         <Authenticated
             header={
@@ -17,6 +16,9 @@ export default function Dashboard({subject_filters, subject_attendances}) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl px-4 lg:px-8">
+                    <SubjectAttendanceChart subject_attendances={subject_attendances}
+                                            subject_filters={subject_filters}/>
+
                     <Table>
                         <TableHeader>
                             <TableRow>
