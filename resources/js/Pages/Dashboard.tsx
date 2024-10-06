@@ -16,7 +16,7 @@ export default function Dashboard({subject_filters, subject_attendances}) {
             <Head title="Dashboard"/>
 
             <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl px-4 lg:px-8">
                     <Table>
                         <TableHeader>
                             <TableRow>
