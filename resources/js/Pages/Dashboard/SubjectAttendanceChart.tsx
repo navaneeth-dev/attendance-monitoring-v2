@@ -1,4 +1,4 @@
-import {Legend, Line, LineChart, XAxis} from "recharts"
+import {CartesianGrid, Legend, Line, LineChart, XAxis, YAxis} from "recharts"
 
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/Components/UI/Card"
 import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from "@/Components/UI/Chart"
@@ -22,8 +22,7 @@ export default function SubjectAttendanceChart({subject_filters, subject_attenda
             ...acc,
             [subject.subject.subject_code]: {
                 label: subject.subject.name,
-                color: `hsl(var(--chart-${i % 5 + 1}))`
-                // color: `#000000`
+                color: `hsl(${i * 36}, 70%, 50%)`
             }
         }
     ), {}) satisfies ChartConfig;
@@ -34,25 +33,26 @@ export default function SubjectAttendanceChart({subject_filters, subject_attenda
         <Card className="mb-6">
             <CardHeader>
                 <CardTitle>Subject Wise Attendance</CardTitle>
-                <CardDescription>Past 30 days</CardDescription>
+                <CardDescription>Past week subject wise attendance.</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>
                     <LineChart
                         accessibilityLayer
                         data={chartData}
-                        // margin={{
-                        //     left: 60,
-                        //     right: 30,
-                        //     top: 30,
-                        //     bottom: 30,
-                        // }}
+                        margin={{
+                            left: 60,
+                            right: 60,
+                            top: 30,
+                            bottom: 30,
+                        }}
                     >
+                        <CartesianGrid
+                            strokeDasharray="3 3" stroke="hsl(var(--muted-foreground))" opacity={0.3}/>
                         <XAxis
                             dataKey="date"
-                            tickLine={false}
-                            axisLine={false}
                         />
+                        <YAxis/>
                         <ChartTooltip
                             content={<ChartTooltipContent/>}
                         />
@@ -67,7 +67,7 @@ export default function SubjectAttendanceChart({subject_filters, subject_attenda
                                 type="linear"
                                 stroke={`var(--color-${subject.subject.subject_code})`}
                                 strokeWidth={2}
-                                dot={true}
+                                dot={false}
                             />
                         ))}
                     </LineChart>
