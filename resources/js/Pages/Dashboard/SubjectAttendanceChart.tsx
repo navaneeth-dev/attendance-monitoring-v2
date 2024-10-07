@@ -23,11 +23,12 @@ export default function SubjectAttendanceChart({subject_filters, subject_attenda
             [subject.subject.subject_code]: {
                 label: subject.subject.name,
                 color: `hsl(var(--chart-${i % 5 + 1}))`
+                // color: `#000000`
             }
         }
     ), {}) satisfies ChartConfig;
 
-    console.log(chartData, chartConfig)
+    console.log(JSON.stringify(chartData, null, 4))
 
     return (
         <Card className="mb-6">
@@ -36,20 +37,21 @@ export default function SubjectAttendanceChart({subject_filters, subject_attenda
                 <CardDescription>Past 30 days</CardDescription>
             </CardHeader>
             <CardContent>
-                <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+                <ChartContainer config={chartConfig}>
                     <LineChart
                         accessibilityLayer
                         data={chartData}
-                        margin={{
-                            left: 12,
-                            right: 12,
-                        }}
+                        // margin={{
+                        //     left: 60,
+                        //     right: 30,
+                        //     top: 30,
+                        //     bottom: 30,
+                        // }}
                     >
                         <XAxis
                             dataKey="date"
                             tickLine={false}
                             axisLine={false}
-                            tickMargin={8}
                         />
                         <ChartTooltip
                             content={<ChartTooltipContent/>}
