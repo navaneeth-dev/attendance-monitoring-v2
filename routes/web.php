@@ -24,7 +24,7 @@ Route::get('/dashboard', function () {
     $subject_attendances = Scrape::where('user_id', $user_id)
         ->with(['subject_attendances' => function (Builder $query) use ($subject_filters) {
             $query->whereIn('subject_id', $subject_filters->pluck('subject_id'));
-        }])->get();
+        }])->get()->sortByDesc('date')->values()->all();
 
 //    $subject_attendances = Scrape::where('user_id', $user_id)
 //        ->with(['subject_attendances' => function (Builder $query) use ($subject_filters) {
