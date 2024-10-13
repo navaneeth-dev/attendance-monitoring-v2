@@ -21,7 +21,7 @@ Route::get('/dashboard', function () {
     $user_id = auth()->user()->id;
     $subject_filters = SubjectFilter::where('user_id', $user_id)->with('subject')->get();
 
-    $subject_attendances = Scrape::where('user_id', $user_id)
+    $scrapes = Scrape::where('user_id', $user_id)
         ->with(['subject_attendances' => function (Builder $query) use ($subject_filters) {
             $query->whereIn('subject_id', $subject_filters->pluck('subject_id'));
         }])->get()->sortByDesc('date')->values()->all();
@@ -33,7 +33,7 @@ Route::get('/dashboard', function () {
 
     return Inertia::render('Dashboard', [
         'subject_filters' => $subject_filters,
-        'subject_attendances' => $subject_attendances,
+        'scrapes' => $scrapes,
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

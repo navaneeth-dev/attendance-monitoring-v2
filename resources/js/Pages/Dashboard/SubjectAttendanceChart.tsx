@@ -1,11 +1,22 @@
-import {CartesianGrid, Legend, Line, LineChart, XAxis, YAxis} from "recharts"
+import {CartesianGrid, Line, LineChart, XAxis, YAxis} from "recharts"
 
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/Components/UI/Card"
-import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from "@/Components/UI/Chart"
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartLegend,
+    ChartLegendContent,
+    ChartTooltip,
+    ChartTooltipContent
+} from "@/Components/UI/Chart"
+import {Scrape, SubjectFilter} from "@/Pages/Dashboard";
 
-export default function SubjectAttendanceChart({subject_filters, subject_attendances}) {
+export default function SubjectAttendanceChart({subject_filters, scrapes}: {
+    subject_filters: SubjectFilter[],
+    scrapes: Scrape[]
+}) {
     // Every row -> Every subject attendance group by date
-    const chartData = subject_attendances.map((sub_attendance, i) => {
+    const chartData = scrapes.map((sub_attendance, i) => {
         const subject_percents = sub_attendance.subject_attendances.reduce((acc, a, i) => ({
             ...acc,
             [subject_filters[i].subject.subject_code]: a.percent
@@ -56,10 +67,7 @@ export default function SubjectAttendanceChart({subject_filters, subject_attenda
                         <ChartTooltip
                             content={<ChartTooltipContent/>}
                         />
-                        <Legend formatter={(value) =>
-                            chartConfig[value as keyof typeof chartConfig]?.label
-                        }
-                        />
+                        <ChartLegend content={<ChartLegendContent/>}/>
                         {subject_filters.map((subject) => (
                             <Line
                                 key={subject.subject.id}

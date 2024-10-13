@@ -3,7 +3,44 @@ import {Head} from '@inertiajs/react';
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/Components/UI/Table";
 import SubjectAttendanceChart from "@/Pages/Dashboard/SubjectAttendanceChart";
 
-export default function Dashboard({subject_filters, subject_attendances}) {
+export interface SubjectFilter {
+    id: number
+    user_id: number
+    subject_id: number
+    created_at: string
+    updated_at: string
+    subject: Subject
+}
+
+export interface Subject {
+    id: number
+    subject_code: string
+    name: string
+    created_at: string
+    updated_at: string
+}
+
+export interface Scrape {
+    id: number
+    user_id: number
+    date: string
+    subject_attendances: SubjectAttendance[]
+}
+
+export interface SubjectAttendance {
+    id: number
+    percent: number
+    user_id: number
+    subject_id: number
+    scrape_id: number
+}
+
+export default function Dashboard({subject_filters, scrapes}: {
+    subject_filters: SubjectFilter[],
+    scrapes: Scrape[]
+}) {
+    console.log(JSON.stringify(subject_filters));
+    console.log(JSON.stringify(scrapes));
     return (
         <Authenticated
             header={
@@ -16,7 +53,7 @@ export default function Dashboard({subject_filters, subject_attendances}) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl px-4 lg:px-8">
-                    <SubjectAttendanceChart subject_attendances={subject_attendances}
+                    <SubjectAttendanceChart scrapes={scrapes}
                                             subject_filters={subject_filters}/>
 
                     <Table>
@@ -30,7 +67,7 @@ export default function Dashboard({subject_filters, subject_attendances}) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {subject_attendances.map(sub_attendance => (
+                            {scrapes.map(sub_attendance => (
                                 <TableRow key={sub_attendance.id}>
                                     <TableCell className="text-center">{sub_attendance.date}</TableCell>
                                     {sub_attendance.subject_attendances.map(attendance => (
