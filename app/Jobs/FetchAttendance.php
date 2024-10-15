@@ -28,10 +28,13 @@ class FetchAttendance implements ShouldQueue
      */
     public function handle(): void
     {
-        $response = Http::post('http://127.0.0.1:8080/scrape_attendance', [
-            'username' => $this->user['rollno'],
-            'password' => $this->user['password'],
-        ]);
+        $response = Http::post(
+            "http://" . config('microservice.attendance') . "/scrape_attendance",
+            [
+                'username' => $this->user['rollno'],
+                'password' => $this->user['password'],
+            ]
+        );
 
         $json = $response->json();
 
