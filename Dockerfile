@@ -34,7 +34,9 @@ COPY . /app
 RUN pnpm run build
 
 # Prod server, copy vendor & public and run octane server
-FROM dunglas/frankenphp
+FROM base
+
+LABEL org.opencontainers.image.source = "https://github.com/navaneeth-dev/attendance-monitoring-v2"
 
 ENV OCTANE_SERVER=frankenphp
 
@@ -45,5 +47,5 @@ COPY --from=vendor /app/vendor /app/vendor
 COPY --from=public /app/public /app/public
 
 EXPOSE 8000
-ENTRYPOINT [ "php", "artisan" ]
-CMD [ "octane:start" ]
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
+CMD [ "php", "artisan", "octane:start" ]
