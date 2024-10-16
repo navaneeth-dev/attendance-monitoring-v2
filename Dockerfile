@@ -6,9 +6,10 @@ RUN apt-get update; \
     apt-get upgrade -yqq; \
     apt-get install -yqq --no-install-recommends --show-progress \
     git \
-    unzip
+    unzip \
+    libpq-dev
 
-RUN docker-php-ext-install pcntl
+RUN docker-php-ext-install pcntl pdo_pgsql
 
 FROM base AS vendor
 
@@ -36,7 +37,7 @@ RUN pnpm run build
 # Prod server, copy vendor & public and run octane server
 FROM base
 
-LABEL org.opencontainers.image.source = "https://github.com/navaneeth-dev/attendance-monitoring-v2"
+LABEL org.opencontainers.image.source="https://github.com/navaneeth-dev/attendance-monitoring-v2"
 
 ENV OCTANE_SERVER=frankenphp
 
