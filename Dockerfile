@@ -1,18 +1,4 @@
-FROM node:20-slim AS public
-
-RUN corepack enable
-
-COPY package.json /app/package.json
-COPY pnpm-lock.yaml /app/pnpm-lock.yaml
-
-WORKDIR /app
-RUN pnpm install --frozen-lockfile
-
-COPY . .
-
-RUN pnpm run build
-
-FROM dunglas/frankenphp
+FROM dunglas/frankenphp AS base
 COPY . /app
 WORKDIR /app
 
@@ -24,12 +10,40 @@ RUN apt-get update; \
 
 RUN docker-php-ext-install pcntl
 
+FROM base AS vendor
+
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN composer install --no-dev
 
+FROM node:20-slim AS public
+
+RUN corepack enable
+
+COPY package.json /app/package.json
+COPY pnpm-lock.yaml /app/pnpm-lock.yaml
+COPY tsconfig.json /app/tsconfig.json
+
+COPY --from=vendor /app/vendor /app/vendor
+
+WORKDIR /app
+RUN pnpm install --frozen-lockfile
+
+# copy src to build
+COPY . /app
+
+RUN pnpm run build
+
+# Prod server, copy vendor & public and run octane server
+FROM dunglas/frankenphp
+
 ENV OCTANE_SERVER=frankenphp
 
+WORKDIR /app
+COPY . /app
+
+COPY --from=vendor /app/vendor /app/vendor
 COPY --from=public /app/public /app/public
 
 EXPOSE 8000
-CMD [ "php", "artisan", "octane:start" ]
+ENTRYPOINT [ "php", "artisan" ]
+CMD [ "octane:start" ]
