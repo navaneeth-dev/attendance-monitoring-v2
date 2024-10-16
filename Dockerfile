@@ -2,9 +2,6 @@ FROM node:20-slim AS public
 
 RUN corepack enable
 
-VOLUME [ "/pnpm-store", "/app/node_modules" ]
-RUN pnpm config --global set store-dir /pnpm-store
-
 COPY package.json /app/package.json
 COPY pnpm-lock.yaml /app/pnpm-lock.yaml
 
