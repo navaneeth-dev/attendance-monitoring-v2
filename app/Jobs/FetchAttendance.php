@@ -74,6 +74,7 @@ class FetchAttendance implements ShouldQueue
         }
 
         Attendance::create([
+            'scrape_id' => $scrape->id,
             'user_id' => $this->user->id,
             'last_updated' => $json['last_updated'],
             'percent' => $json['percent'],

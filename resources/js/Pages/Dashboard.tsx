@@ -25,6 +25,7 @@ export interface Scrape {
     user_id: number
     date: string
     subject_attendances: SubjectAttendance[]
+    attendance: Attendance
 }
 
 export interface SubjectAttendance {
@@ -37,15 +38,15 @@ export interface SubjectAttendance {
 
 export interface Attendance {
     user_id: number
-    // last_updated:
+    last_updated: string
     percent: number
 }
 
-export default function Dashboard({subject_filters, scrapes, attendances}: {
+export default function Dashboard({subject_filters, scrapes}: {
     subject_filters: SubjectFilter[],
     scrapes: Scrape[],
-    attendances: Attendance[],
 }) {
+    console.log(scrapes)
     return (
         <Authenticated
             header={
@@ -65,6 +66,8 @@ export default function Dashboard({subject_filters, scrapes, attendances}: {
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[100px] text-center py-2">Date</TableHead>
+                                <TableHead className="w-[100px] text-center py-2">Last Updated</TableHead>
+                                <TableHead className="w-[100px] text-center py-2">Percent</TableHead>
                                 {subject_filters.map(subject => (
                                     <TableHead className="w-[100px] text-sm text-center py-2"
                                                key={subject.subject.id}>{subject.subject.name}</TableHead>
@@ -75,6 +78,9 @@ export default function Dashboard({subject_filters, scrapes, attendances}: {
                             {scrapes.map(scrape => (
                                 <TableRow key={scrape.id}>
                                     <TableCell className="text-center">{scrape.date}</TableCell>
+                                    <TableCell
+                                        className="text-center">{scrape.attendance.last_updated}</TableCell>
+                                    <TableCell className="text-center">{scrape.attendance.percent}</TableCell>
                                     {scrape.subject_attendances.map(attendance => (
                                         <TableCell
                                             key={attendance.id} className="text-center">{attendance.percent}</TableCell>

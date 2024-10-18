@@ -18,18 +18,14 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $user_id = auth()->user()->id;
+    $user_id = auth()->id();
     $subject_filters = SubjectFilter::where('user_id', $user_id)->with('subject')->get();
 
     $scrapes = Scrape::where('user_id', $user_id)
+        ->with('attendance')
         ->with(['subject_attendances' => function (Builder $query) use ($subject_filters) {
             $query->whereIn('subject_id', $subject_filters->pluck('subject_id'));
         }])->get()->sortByDesc('date')->values()->all();
-
-//    $subject_attendances = Scrape::where('user_id', $user_id)
-//        ->with(['subject_attendances' => function (Builder $query) use ($subject_filters) {
-//            $query->whereIn('subject_attendances.subject_id', $subject_filters->pluck('id'));
-//        }])->get();
 
     return Inertia::render('Dashboard', [
         'subject_filters' => $subject_filters,
