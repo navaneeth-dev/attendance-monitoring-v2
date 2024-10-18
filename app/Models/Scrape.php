@@ -18,6 +18,11 @@ class Scrape extends Model
         return $this->hasMany(SubjectAttendance::class);
     }
 
+    public function attendance()
+    {
+        return $this->hasOne(Attendance::class);
+    }
+
     protected function casts(): array
     {
         return [
