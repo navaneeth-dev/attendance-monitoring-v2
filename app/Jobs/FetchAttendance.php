@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Attendance;
 use App\Models\Scrape;
 use App\Models\Subject;
 use App\Models\SubjectAttendance;
@@ -72,6 +73,10 @@ class FetchAttendance implements ShouldQueue
             ]);
         }
 
-//        $this->user->update([]);
+        Attendance::create([
+            'user_id' => $this->user->id,
+            'last_updated' => $json['last_updated'],
+            'percent' => $json['percent'],
+        ]);
     }
 }
