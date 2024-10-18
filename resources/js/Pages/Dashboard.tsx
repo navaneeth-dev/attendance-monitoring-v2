@@ -35,12 +35,17 @@ export interface SubjectAttendance {
     scrape_id: number
 }
 
-export default function Dashboard({subject_filters, scrapes}: {
+export interface Attendance {
+    user_id: number
+    // last_updated:
+    percent: number
+}
+
+export default function Dashboard({subject_filters, scrapes, attendances}: {
     subject_filters: SubjectFilter[],
-    scrapes: Scrape[]
+    scrapes: Scrape[],
+    attendances: Attendance[],
 }) {
-    console.log(JSON.stringify(subject_filters));
-    console.log(JSON.stringify(scrapes));
     return (
         <Authenticated
             header={
@@ -67,10 +72,10 @@ export default function Dashboard({subject_filters, scrapes}: {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {scrapes.map(sub_attendance => (
-                                <TableRow key={sub_attendance.id}>
-                                    <TableCell className="text-center">{sub_attendance.date}</TableCell>
-                                    {sub_attendance.subject_attendances.map(attendance => (
+                            {scrapes.map(scrape => (
+                                <TableRow key={scrape.id}>
+                                    <TableCell className="text-center">{scrape.date}</TableCell>
+                                    {scrape.subject_attendances.map(attendance => (
                                         <TableCell
                                             key={attendance.id} className="text-center">{attendance.percent}</TableCell>
                                     ))}
