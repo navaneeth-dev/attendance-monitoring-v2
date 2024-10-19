@@ -10,6 +10,7 @@ use App\Models\SubjectFilter;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 
 class FetchAttendance implements ShouldQueue
@@ -73,10 +74,11 @@ class FetchAttendance implements ShouldQueue
             ]);
         }
 
+        $last_updated = Carbon::parse($json['last_updated']);
         Attendance::create([
             'scrape_id' => $scrape->id,
             'user_id' => $this->user->id,
-            'last_updated' => $json['last_updated'],
+            'last_updated' => $last_updated,
             'percent' => $json['percent'],
         ]);
     }
