@@ -46,7 +46,23 @@ export default function Dashboard({subject_filters, scrapes}: {
     subject_filters: SubjectFilter[],
     scrapes: Scrape[],
 }) {
-    console.log(scrapes)
+    if (scrapes.length === 0)
+        return (
+            <Authenticated
+                header={
+                    <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                        Dashboard
+                    </h2>
+                }
+            >
+                <Head title="Dashboard"/>
+
+                <div className="py-12 mx-auto max-w-7xl px-4 lg:px-8">
+                    <h1>No Data Yet</h1>
+                </div>
+            </Authenticated>
+        )
+
     return (
         <Authenticated
             header={
