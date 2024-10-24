@@ -22,6 +22,7 @@ export default function UpdateProfileInformation({
         useForm({
             name: user.name,
             email: user.email,
+            ntfy_channel: user.ntfy_channel,
         });
 
     const submit: FormEventHandler = (e) => {
@@ -57,6 +58,20 @@ export default function UpdateProfileInformation({
                     />
 
                     <InputError className="mt-2" message={errors.name}/>
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="ntfy_channel" value="Ntfy Channel"/>
+
+                    <TextInput
+                        id="ntfy_channel"
+                        className="mt-1 block w-full bg-gray-200"
+                        value={data.ntfy_channel}
+                        onChange={(e) => setData('ntfy_channel', e.target.value)}
+                        disabled
+                    />
+
+                    <InputError className="mt-2" message={errors.ntfy_channel}/>
                 </div>
 
                 <div>
