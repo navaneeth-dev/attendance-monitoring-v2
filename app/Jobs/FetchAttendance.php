@@ -75,11 +75,16 @@ class FetchAttendance implements ShouldQueue
         }
 
         $last_updated = Carbon::parse($json['last_updated']);
-        Attendance::create([
+        $attendance = Attendance::create([
             'scrape_id' => $scrape->id,
             'user_id' => $this->user->id,
             'last_updated' => $last_updated,
             'percent' => $json['percent'],
         ]);
+
+        Http::withHeaders([
+            "Title" => "Attendance",
+        ])->withBody("Attendance is " . $attendance->percent)
+            ->post("https://ntfy.foss.rizexor.com/" . $this->user->ntfy_channel);
     }
 }
